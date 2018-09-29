@@ -78,6 +78,8 @@ def main():
                         help='path to be used in mqtt broker', dest='path')
     parser.add_argument('--transport', action='store', default='websockets', type=str,
                         help='transport layer used in mqtt broker', dest='transport')
+    parser.add_argument('--qos', action='store', default=2, type=int,
+                        help='Quality of Service to be used', dest='qos', choices=[0, 1, 2])
     args = parser.parse_args()
     # ---------------------------------------------------------------------------
     # Important constants and definitions to be used
@@ -86,7 +88,7 @@ def main():
     hostname = args.hostname
     port = args.port
     transport = args.transport
-
+    qos = args.qos
     # ---------------------------------------------------------------------------
     # set up logging to file to used debug level saved to disk
     # ---------------------------------------------------------------------------
@@ -115,11 +117,11 @@ def main():
         if message.topic == Topic:
             if self.index == 0:
                 self.t_start=time.time()
-                logging.info("Received message 0")
+                logging.info("Received message 0 with timestamp {0}".format(message.timestamp))
             self.index += 1
-            if self.index >= 1000:
-                logging.info("Received 1000 messages")
+            if (self.index == 1000) and (int.from_bytes(message.payload, 'little') == 999):
                 self.t_end = time.time()
+                logging.info("Received 1000 messages. Last message timestamp {0}".format(message.timestamp))
                 t_elapsed = (self.t_end-self.t_start)
                 logging.info('Rate is {0:6.2f} messages per second'.format(1000.0/t_elapsed))
         elif message.topic == status:
@@ -163,7 +165,7 @@ def main():
             client.loop_stop(force=True)
             logging.info('Failed to connect to broker...Exiting')
             return
-    client.subscribe(Topic, 0)
+    client.subscribe(Topic, qos)
     client.subscribe(status, 2)
     try:
         client.loop_forever()

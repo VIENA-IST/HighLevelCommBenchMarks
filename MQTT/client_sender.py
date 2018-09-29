@@ -75,6 +75,8 @@ def main():
                         help='path to be used in mqtt broker', dest='path')
     parser.add_argument('--transport', action='store', default='websockets', type=str,
                         help='transport layer used in mqtt broker', dest='transport')
+    parser.add_argument('--qos', action='store', default=2, type=int,
+                        help='Quality of Service to be used', dest='qos', choices=[0, 1, 2])
     args = parser.parse_args()
     # ---------------------------------------------------------------------------
     # Important constants and definitions to be used
@@ -83,6 +85,7 @@ def main():
     hostname = args.hostname
     port = args.port
     transport = args.transport
+    qos = args.qos
     # ---------------------------------------------------------------------------
     # set up logging to file to used debug level saved to disk
     # ---------------------------------------------------------------------------
@@ -141,7 +144,7 @@ def main():
         logging.info('Starting to send messages...')
         client.t_start = time.time()
         for I in range(1000):
-            info = client.publish(Topic, payload="Message {0:04d}".format(I), qos=0)
+            info = client.publish(Topic, payload=I.to_bytes(4, 'little'), qos=qos)
             # sleep(0.001)
         logging.info('Finished to send messages...')
         while not info.is_published():
@@ -149,6 +152,7 @@ def main():
         client.t_end = time.time()
         t_elapsed = (client.t_end - client.t_start)
         logging.info('Rate is {0:6.2f} messages per second'.format(1000.0 / t_elapsed))
+        logging.info('First timestamp {0}, last timestamp {1}'.format(client.t_start, client.t_end))
     except KeyboardInterrupt as e:
         logging.info('[Main] Got exception {0}... exiting now'.format(e))
     finally:

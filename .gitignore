@@ -1,6 +1,7 @@
 
 .idea/
 .Python
+venv/
 MQTT/venv/
 MQTT/env/
 MQTT/build/
