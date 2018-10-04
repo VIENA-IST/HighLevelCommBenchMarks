@@ -145,7 +145,7 @@ def main():
         client.t_start = time.time()
         for I in range(1000):
             info = client.publish(Topic, payload=I.to_bytes(4, 'little'), qos=qos)
-            # sleep(0.001)
+            logging.debug("Publishing message {0:04d}".format(I))
         logging.info('Finished to send messages...')
         while not info.is_published():
             time.sleep(0.0001)

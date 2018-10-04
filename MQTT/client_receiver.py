@@ -101,7 +101,7 @@ def main():
     # define a Handler which writes INFO messages or higher in console
     # ---------------------------------------------------------------------------
     console = logging.StreamHandler()
-    console.setLevel(logging.INFO)
+    console.setLevel(logging.DEBUG)
     # set a format which is simpler for console use
     formatter = logging.Formatter('%(name)-20s: %(levelname)-8s %(message)s')
     # tell the handler to use this format
@@ -113,22 +113,22 @@ def main():
     # ---------------------------------------------------------------------------
 
     def on_message(self, userdata, message):
-
         if message.topic == Topic:
-            if self.index == 0:
+            logging.debug('Received message: {0:04d} on topic {1} with QoS {2}'.format(
+                int.from_bytes(message.payload, 'little'), message.topic, message.qos))
+            if int.from_bytes(message.payload, 'little') == 0:
                 self.t_start=time.time()
+                self.index = 0
                 logging.info("Received message 0 with timestamp {0}".format(message.timestamp))
-            self.index += 1
-            if (self.index == 1000) and (int.from_bytes(message.payload, 'little') == 999):
+            self.index = self.index + 1
+            if int.from_bytes(message.payload, 'little') == 999:
                 self.t_end = time.time()
-                logging.info("Received 1000 messages. Last message timestamp {0}".format(message.timestamp))
+                logging.info("Received {1} messages. Last message timestamp {0}".format(message.timestamp, self.index))
                 t_elapsed = (self.t_end-self.t_start)
                 logging.info('Rate is {0:6.2f} messages per second'.format(1000.0/t_elapsed))
         elif message.topic == status:
             logging.info('Received message: "' + str(message.payload.decode('UTF-8')) + '" on topic '
                          + message.topic + ' with QoS ' + str(message.qos))
-            if str(message.payload.decode('UTF-8')) == 'Disconnected':
-                self.index = 0
         else:
             logging.info("Received message :" + str(message.payload) + " on topic "
                          + message.topic + " with QoS " + str(message.qos))
@@ -150,9 +150,9 @@ def main():
     client = mqtt.Client(protocol=protocol, transport=transport)
     client.on_connect = on_connect
     client.on_message = on_message
-    client.index = 0
     client.t_start = 0
     client.t_end = 0
+    client.index = 0
     noFaults = True
     try:
         client.connect(hostname, port=port)
