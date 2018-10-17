@@ -29,8 +29,6 @@ import signal
 import paho.mqtt.client as mqtt
 
 
-
-
 protocol = mqtt.MQTTv311
 # mqtt topics to be used with epos
 Topic = 'VIENA/steering/'  # base topic
@@ -101,7 +99,7 @@ def main():
     # define a Handler which writes INFO messages or higher in console
     # ---------------------------------------------------------------------------
     console = logging.StreamHandler()
-    console.setLevel(logging.DEBUG)
+    console.setLevel(logging.INFO)
     # set a format which is simpler for console use
     formatter = logging.Formatter('%(name)-20s: %(levelname)-8s %(message)s')
     # tell the handler to use this format

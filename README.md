@@ -18,7 +18,22 @@ Test conditions are as follow:
 * comparison between local MQTT broker (mosquitto) running in raspberryPI 3 and online servers
 * mean of 5 consecutive tests
 
+**note** Since official repository did not have the latest release of mosquitto, it was necessary to
+manually update it using:
+```bash
+wget http://repo.mosquitto.org/debian/mosquitto-repo.gpg.key
+sudo apt-key add mosquitto-repo.gpg.key
+cd /etc/apt/sources.list.d/
+sudo wget http://repo.mosquitto.org/debian/mosquitto-stretch.list
+sudo apt update
+sudo apt upgrade
+```
+
 > :exclamation: In order to use mosquitto with QoS of 1 or 2, we had to increase max_queued_messages to 10000
+> ```bash 
+>  # max_inflight_messages 0
+>  max_queued_messages 10000 
+> ```
 
 Here follows an example of a set of tests printed in the receiver client logged output:
 ```bash
@@ -58,15 +73,15 @@ Below is the resume of results performed for **websockets** transport in message
 |mosquitto         | Yes     |0    | 9754.14        |1735.97 |7316.35 |11653.73  |
 |mosquitto         | Yes     |1    | 4917.01        |172.89  |4680.69 | 5125.19  |
 |mosquitto         | Yes     |2    | 3663.86        |234.97  |3339.15 | 3999.98  |
-|mosquitto (Rpi)   | Yes     |0    | x                 |        |        |          |
-|mosquitto (Rpi)   | Yes     |1    | x                 |        |        |          |
-|mosquitto (Rpi)   | Yes     |2    | x                 |        |        |          |
+|mosquitto (Rpi)   | Yes     |0    | 820.48         |36.45   |781.01  | 860.08   |
+|mosquitto (Rpi)   | Yes     |1    | 780.07         |73.96   |650.22  | 835.46   |
+|mosquitto (Rpi)   | Yes     |2    | 390.70         |30.80   |356.01  | 426.96   |
 |mosquitto.org     | No      |0    | 103.71         | 4.47   | 96.85  | 108.64   |
 |mosquitto.org     | No      |1    | 107.87         | 9.85   | 90.55  | 113.12   |
 |mosquitto.org     | No      |2    | 57.69          | 0.65   | 56.89  | 58.44    |
 |broker.hivemq.com | No      |0    | 3209.51        | 2631.14| 555.91 | 6589.80  |
-|broker.hivemq.com | No      |1    | x                 |        |        |          |
-|broker.hivemq.com | No      |2    | x                 |        |        |          |
+|broker.hivemq.com | No      |1    | 4917.01        |172.89  |4680.69 | 5125.19  |
+|broker.hivemq.com | No      |2    | 3663.86        |234.97  |3339.15 | 3999.98  |
 
 
 
@@ -76,15 +91,16 @@ Below is the resume of results performed for **websockets** transport in message
 |mosquitto         | Yes     |0    | 20855.58          |6606.65 |13611.86  |29385.87  |
 |mosquitto         | Yes     |1    | 6370.67           |343.24  |5797.45   |6627.05   |
 |mosquitto         | Yes     |2    | 4653.94           |189.67  |4374.28   |4883.84   |
-|mosquitto (Rpi)   | Yes     |0    | x                 |        |        |          |
-|mosquitto (Rpi)   | Yes     |1    | x                 |        |        |          |
-|mosquitto (Rpi)   | Yes     |2    | x                 |        |        |          |
+|mosquitto (Rpi)   | Yes     |0    | 5969.37           |570.65  |5100.85   |6436.20   |
+|mosquitto (Rpi)   | Yes     |1    | 818.21            |25.51   |784.16    |850.88    |
+|mosquitto (Rpi)   | Yes     |2    | 409.12            |22.39   |372.51    |430.22    |
 |mosquitto.org     | No      |0    | 6863.24           |1031.36 |5768.09   |8451.10   |
 |mosquitto.org     | No      |1    | 106.53            | 8.66   |  91.23   | 111.90   |
 |mosquitto.org     | No      |2    | 57.64             | 0.59   |  56.92   | 58.43    |
 |broker.hivemq.com | No      |0    | 6382.99           |905.09  | 4832.09  | 7004.41  |
-|broker.hivemq.com | No      |1    | x                 |        |          |          |
-|broker.hivemq.com | No      |2    | x                 |        |          |          |
+|broker.hivemq.com | No      |1    | 6370.67           |343.24  | 5797.45  | 6627.05  |
+|broker.hivemq.com | No      |2    | 4653.94           |189.67  | 4374.28  | 4883.84  |
 
-Resume of results performed for **tcp** transport
 
+
+ 
