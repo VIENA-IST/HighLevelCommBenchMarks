@@ -1,7 +1,7 @@
 # High level communication benchmark tests
 
 For future implementations, is important to test the ability of using a fast interface for distributing orders.
-For that, it is tested here some different approaches in order to help us choose future implementations.
+For that, it is tested here some different approaches in order to help us choose implementation structure.
 
 ## Purpose
 
