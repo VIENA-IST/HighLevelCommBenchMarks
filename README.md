@@ -11,12 +11,13 @@ compare it with the capabilities of ROS.
 ## MQTT results
 
 Test conditions are as follow:
-* 1000 messages sent, with format "Message xxxx" where "xxxx" is the number of message.
-* same qos in both ends
-* using same PC to run the sender and receiver clients Lenovo T480
-* same module implementation of MQTT in both endpoints (paho-mqtt)
-* comparison between local MQTT broker (mosquitto) running in raspberryPI 3 and online servers
-* mean of 5 consecutive tests
+* 1000 messages sent, using an Int32 with the number of message.
+* same qos (quality of service) in both ends.
+* using same PC to run the sender and receiver clients Lenovo T480.
+* same module implementation of MQTT in both endpoints (paho-mqtt).
+* comparison between local MQTT broker (mosquitto) running in raspberryPI 3 and Laptop and online servers.
+* mean of 5 consecutive tests.
+* transport used is websockets in both clients.
 
 **note** Since official repository did not have the latest release of mosquitto, it was necessary to
 manually update it using:
